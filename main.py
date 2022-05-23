@@ -44,7 +44,7 @@ class APIHandler:
             progress_ms = current_playback['progress_ms']
             duration_ms = current_playback['item']['duration_ms']
             return self.__get_mins_secs(progress_ms) + \
-                " / " + self.__get_mins_secs(duration_ms)
+                "/" + self.__get_mins_secs(duration_ms)
         return None
 
     def __get_mins_secs(self, ms):
@@ -61,11 +61,13 @@ async def main(client):
     while True:
         skip = False
         if handler.getCurrentTrack() is not None:
-            about = "Listening to " + \
+            about = "🎧" + \
                 handler.getCurrentTrack() + \
                 " - " + handler.getCurrentTrackArtist() + \
                 " [" + handler.getCurrentPlaybackTime() + "] "
         else:
+            about = TELEGRAM_BIO
+        if len(about) >= 70:
             about = TELEGRAM_BIO
         print(about)
         try:
