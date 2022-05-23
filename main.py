@@ -1,11 +1,12 @@
 import spotipy
+import asyncio
 import spotipy.util as util
 import os
 from os.path import join, dirname
 from dotenv import load_dotenv
 from telethon.tl.functions.account import UpdateProfileRequest
-from time import sleep
 from telethon import TelegramClient
+from telethon.errors import FloodWaitError
 
 
 class APIHandler:
@@ -58,6 +59,7 @@ async def main(client):
     TELEGRAM_BIO = os.environ.get("TELEGRAM_BIO")
 
     while True:
+        skip = False
         if handler.getCurrentTrack() is not None:
             about = "Listening to " + \
                 handler.getCurrentTrack() + \
@@ -66,8 +68,15 @@ async def main(client):
         else:
             about = TELEGRAM_BIO
         print(about)
-        await client(UpdateProfileRequest(about=about))
-        sleep(60)
+        try:
+            await client(UpdateProfileRequest(about=about))
+        except FloodWaitError as e:
+            to_wait = e.seconds()
+
+            skip = True
+            await asyncio.sleep(int(to_wait))
+        if not skip:
+            await asyncio.sleep(30)
 
 if __name__ == "__main__":
     load_dotenv(join(dirname(__file__), '.env'))
