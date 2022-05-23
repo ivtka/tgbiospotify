@@ -63,8 +63,7 @@ async def main(client):
         if handler.getCurrentTrack() is not None:
             about = "🎧" + \
                 handler.getCurrentTrack() + \
-                " - " + handler.getCurrentTrackArtist() + \
-                " [" + handler.getCurrentPlaybackTime() + "] "
+                " - " + handler.getCurrentTrackArtist()
         else:
             about = TELEGRAM_BIO
         if len(about) >= 70:
