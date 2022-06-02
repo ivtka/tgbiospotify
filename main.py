@@ -61,7 +61,7 @@ async def main(client):
     while True:
         skip = False
         if handler.getCurrentTrack() is not None:
-            about = "🎧" + \
+            about = "🎧 Listening to " + \
                 handler.getCurrentTrack() + \
                 " - " + handler.getCurrentTrackArtist()
         else:
